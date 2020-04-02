@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { Colors } from '../theme';
+import { confirmAlert } from 'react-confirm-alert';
+import { ColorsRadio, SizesRadio } from '../components';
+import ProductContext from '../context';
 
 const Body = styled.div`
 width: 100%;
@@ -96,56 +99,79 @@ const CartButton = styled.button`
     }
 `;
 
-const ColorsContainer = styled.form`
-  display: flex;
-  justify-content: center;
-  padding: 10px;
+const SizesRadioContainer = styled.div`
+align-self: center;
+    width: 40%;
 `;
 
-const ColorLabel = styled.label`
+const ColorsRadioContainer = styled.div`
+    align-self: center;
+    width: 100%;
+`;
+
+const ProductQuantity = styled.input`
+    width: 30%;
     margin: 1%;
-`;
-
-const ColorRadio = styled.input`
-  display: none;
-  &:checked ~ span{
-      border: 2px double ${Colors.TextBlack};
-  }
-`;
-
-const ColorRed = styled.span`
-    display: block;
-    margin: 1px;
-    background-color: ${Colors.Red};
-    width: 25px;
-    height: 25px;
-    border-radius: 100%;
-`;
-const ColorBlue = styled.span`
-    display: block;
-    margin: 1px;
-    background-color: ${Colors.Blue};
-    width: 25px;
-    height: 25px;
-    border-radius: 100%;
-`;
-const ColorGreen = styled.span`
-    display: block;
-    margin: 1px;
-    background-color: ${Colors.Green};
-    width: 25px;
-    height: 25px;
-    border-radius: 100%;
+    border: 1px solid ${Colors.PrimaryButton};
+    font-size: medium;
+    align-self: center;
+    text-align: center;
 `;
 
 const ProductDetail = props => {
 
-    const location = useLocation();
+    const [tColor, setTColor] = useState(undefined);
+    const [size, setSize] = useState(undefined);
+    const [quantity, setQuantity] = useState(0);
 
-    const product = location.product;
-    console.log('product', product)
+    let history = useHistory();
 
-    const [tColor, setTColor] = useState('');
+    // eslint-disable-next-line
+    const { state, dispatch } = useContext(ProductContext);
+
+    const product = state.products.find(product => product.id === parseInt(props.match.params.id));
+
+    const addToCart = () => {
+        if (!!tColor && !!size && !!quantity) {
+            dispatch({ type: 'ADD_TO_CART', payload: { ...product, color: tColor, size, quantity: parseInt(quantity) } });
+            setTColor(undefined);
+            setSize(undefined);
+            setQuantity(0);
+            confirmAlert({
+                title: 'Cart',
+                message: 'Item added to your Cart Successfully',
+                buttons: [
+                    {
+                        label: 'Continue Shopping',
+                        onClick: () => void 0,
+                    },
+                    {
+                        label: 'Go to Cart',
+                        onClick: () => history.push('/cart'),
+                    }
+                ],
+                closeOnEscape: true,
+                closeOnClickOutside: true,
+            });
+        } else {
+            confirmAlert({
+                title: 'Cart',
+                message: 'Please select size, color and quntity',
+                buttons: [
+                    {
+                        label: 'OK',
+                        onClick: () => {
+                            setTColor(undefined);
+                            setSize(undefined);
+                            setQuantity(0);
+                        },
+                    }
+                ],
+                closeOnEscape: false,
+                closeOnClickOutside: false,
+            });
+        }
+    }
 
     return (
         <Body>
@@ -161,34 +187,21 @@ const ProductDetail = props => {
                     <ProductDescription>
                         Fugiat aliqua aliqua qui ea magna dolore mollit incididunt laborum sint aute. Ex deserunt velit fugiat mollit veniam. Nostrud commodo dolore ipsum cillum dolore. Consectetur veniam sint veniam pariatur id ipsum. Consequat ullamco Lorem enim proident. Et velit id irure irure. Duis dolor ipsum nulla ipsum magna.Duis consequat officia ea aliqua quis laborum tempor sunt est eiusmod qui tempor ut. Adipisicing officia voluptate amet id deserunt anim velit et. Ut ad dolore deserunt non velit fugiat ex consequat velit sint. Aliqua laboris sint et id quis ipsum. Anim fugiat officia adipisicing et irure mollit duis quis laborum veniam aliquip non. Ea veniam reprehenderit proident officia magna veniam nisi incididunt est ad veniam consequat excepteur officia.
                 </ProductDescription>
-                    <ColorsContainer>
-                        <ColorLabel>
-                            <ColorRadio
-                                onChange={() => setTColor('red')}
-                                value='red' type="radio" name='tColor'
-                                checked={tColor === 'red'}
-                            />
-                            <ColorRed />
-                        </ColorLabel>
-                        <ColorLabel>
-                            <ColorRadio
-                                onChange={() => setTColor('blue')}
-                                value='blue' type="radio" name='tColor'
-                                checked={tColor === 'blue'}
-                            />
-                            <ColorBlue />
-                        </ColorLabel>
-                        <ColorLabel>
-                            <ColorRadio
-                                onChange={() => setTColor('green')}
-                                value='green' type="radio" name='tColor'
-                                checked={tColor === 'green'}
-                            />
-                            <ColorGreen />
-                        </ColorLabel>
-                    </ColorsContainer>
+                    <ColorsRadioContainer>
+                        <ColorsRadio setColor={setTColor} color={tColor} />
+                    </ColorsRadioContainer>
+                    <SizesRadioContainer>
+                        <SizesRadio setSize={setSize} size={size} />
+                    </SizesRadioContainer>
+                    <ProductQuantity
+                        type='number'
+                        name='quantity'
+                        value={quantity}
+                        onClick={e => e.stopPropagation()}
+                        onChange={e => setQuantity(e.target.value.replace(/\D/, ''))}
+                    />
                     <ProductPrice>Price: ${product?.price}</ProductPrice>
-                    <CartButton>{'Add to Cart'}</CartButton>
+                    <CartButton onClick={() => addToCart()}>{'Add to Cart'}</CartButton>
                 </ProductDetailsContainer>
             </ProductCard>
         </Body>

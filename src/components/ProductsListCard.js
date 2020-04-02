@@ -1,7 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import styled from 'styled-components';
 import { Colors } from '../theme';
 import { useHistory } from 'react-router-dom';
+import ProductContext from '../context';
+import ColorsRadio from './ColorsRadio';
+import { SizesRadio } from '.';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 const ProductCard = styled.div`
     margin: 2%;
@@ -14,24 +19,24 @@ const ProductCard = styled.div`
     padding: 1%;
     color: ${Colors.TextBlack};
     box-shadow: 0px 0px 10px 1px ${Colors.Shadow};
-
     &:hover {
     box-shadow: 0px 0px 10px 10px ${Colors.Shadow};
     }
 `;
 
 const ProductName = styled.p`
+    flex: 1;
     font-size: large;
     font-weight: bold;
     text-align: center;
 `;
 
 const ProductImageContainer = styled.div`
-width: 90%;
-height: 100%;
-text-align: center;
-position: relative;
-border: 1px solid ${Colors.Primary};
+    width: 90%;
+    flex: 5;
+    text-align: center;
+    position: relative;
+    border: 1px solid ${Colors.Primary};
 `;
 
 const ProductImage = styled.img`
@@ -56,11 +61,21 @@ const ProductCategory = styled.div`
 `;
 
 const ProductPrice = styled.p`
+    flex: 1;
+    font-size: medium;
+    text-align: center;
+`;
+
+const ProductQuantity = styled.input`
+    width: 30%;
+    margin: 1%;
+    border: 1px solid ${Colors.PrimaryButton};
     font-size: medium;
     text-align: center;
 `;
 
 const CartButton = styled.button`
+    flex: 1;
     width: 30%;
     height: 10%;
     background-color: ${Colors.Secondary};
@@ -71,61 +86,73 @@ const CartButton = styled.button`
     }
 `;
 
-const ColorsContainer = styled.form`
-  display: flex;
-  padding: 10px;
+const SizesRadioContainer = styled.div`
+    flex: 1;
+    width: 100%;
 `;
 
-const ColorLabel = styled.label`
-margin: 1%;
-&:hover{
-    padding: 1%;
-}
-`;
-
-const ColorRadio = styled.input`
-  display: none;
-  &:checked ~ span{
-      border: 1px double ${Colors.TextBlack};
-  }
-`;
-
-const ColorRed = styled.span`
-    display: block;
-    margin: 1px;
-    background-color: ${Colors.Red};
-    width: 25px;
-    height: 25px;
-    border-radius: 100%;
-`;
-const ColorBlue = styled.span`
-    display: block;
-    margin: 1px;
-    background-color: ${Colors.Blue};
-    width: 25px;
-    height: 25px;
-    border-radius: 100%;
-`;
-const ColorGreen = styled.span`
-    display: block;
-    margin: 1px;
-    background-color: ${Colors.Green};
-    width: 25px;
-    height: 25px;
-    border-radius: 100%;
+const ColorsRadioContainer = styled.div`
+    flex: 1;
+    width: 100%;
 `;
 
 const ProductsListCard = props => {
 
     const product = props.product;
-
-    const [tColor, setTColor] = useState('');
+    const [tColor, setTColor] = useState(undefined);
+    const [size, setSize] = useState(undefined);
+    const [quantity, setQuantity] = useState(0);
 
     let history = useHistory();
 
+    // eslint-disable-next-line
+    const { state, dispatch } = useContext(ProductContext);
+
+    const addToCart = () => {
+        if (!!tColor && !!size && !!quantity) {
+            dispatch({ type: 'ADD_TO_CART', payload: { ...product, color: tColor, size, quantity: parseInt(quantity) } });
+            setTColor(undefined);
+            setSize(undefined);
+            setQuantity(0);
+            confirmAlert({
+                title: 'Cart',
+                message: 'Item added to your Cart Successfully',
+                buttons: [
+                    {
+                        label: 'Continue Shopping',
+                        onClick: () => void 0,
+                    },
+                    {
+                        label: 'Go to Cart',
+                        onClick: () => history.push('/cart'),
+                    }
+                ],
+                closeOnEscape: true,
+                closeOnClickOutside: true,
+            });
+        } else {
+            confirmAlert({
+                title: 'Cart',
+                message: 'Please select size, color and quntity',
+                buttons: [
+                    {
+                        label: 'OK',
+                        onClick: () => {
+                            setTColor(undefined);
+                            setSize(undefined);
+                            setQuantity(0);
+                        },
+                    }
+                ],
+                closeOnEscape: false,
+                closeOnClickOutside: false,
+            });
+        }
+    }
+
     return (
         <ProductCard onClick={() => history.push({
-            pathname: '/item',
+            pathname: `/item/${product.id}`,
             product: product,
         })}>
             <ProductName>{product.title}</ProductName>
@@ -134,34 +161,22 @@ const ProductsListCard = props => {
                 <ProductDepartment>{product.department}</ProductDepartment>
                 <ProductCategory>{product.category}</ProductCategory>
             </ProductImageContainer>
-            <ColorsContainer onClick={e => e.stopPropagation()}>
-                <ColorLabel>
-                <ColorRadio
-                    onChange={() => setTColor('red')}
-                    value='red' type="radio" name='tColor'
-                    checked={tColor === 'red'}
-                />
-                <ColorRed />
-            </ColorLabel>
-            <ColorLabel>
-                <ColorRadio
-                    onChange={() => setTColor('blue')}
-                    value='blue' type="radio" name='tColor'
-                    checked={tColor === 'blue'}
-                />
-                <ColorBlue />
-            </ColorLabel>
-            <ColorLabel>
-                <ColorRadio
-                    onChange={() => setTColor('green')}
-                    value='green' type="radio" name='tColor'
-                    checked={tColor === 'green'}
-                />
-                <ColorGreen />
-            </ColorLabel>
-            </ColorsContainer>
-        <ProductPrice>${product.price}</ProductPrice>
-        <CartButton>{'Add to Cart'}</CartButton>
+            <ColorsRadioContainer>
+                <ColorsRadio setColor={setTColor} color={tColor} />
+            </ColorsRadioContainer>
+            <SizesRadioContainer>
+                <SizesRadio setSize={setSize} size={size} />
+            </SizesRadioContainer>
+            <ProductPrice>${product.price}</ProductPrice>
+            <ProductQuantity
+                type='number'
+                name='quantity'
+                value={quantity}
+                onClick={e => e.stopPropagation()}
+                onChange={e => setQuantity(e.target.value.replace(/\D/, ''))}
+            />
+            <CartButton onClick={e => { e.stopPropagation(); addToCart(); }}>{'Add to Cart'}</CartButton>
+
         </ProductCard >
     )
 }

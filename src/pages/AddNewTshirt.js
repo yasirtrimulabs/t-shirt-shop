@@ -89,7 +89,7 @@ const AddNewTshirt = () => {
 
     const addProduct = e => {
         if (!!title && !!price && !!department && !!category) {
-            dispatch({ type: 'add', payload: { title, price, department, category } });
+            dispatch({ type: 'ADD_PRODUCT', payload: { id: state.products.length, title, price, department, category } });
             history.push('/');
         }
     }

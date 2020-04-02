@@ -60,19 +60,21 @@ const Home = () => {
     // eslint-disable-next-line
     const { state, dispatch } = useContext(ProductContext);
 
-    const [products, setProducts] = useState(state)
+    const allProducts = state.products;
+
+    const [products, setProducts] = useState(allProducts)
 
     useEffect(() => {
         if (!!department) {
-            setProducts(state.filter(product => product.department === department));
+            setProducts(allProducts.filter(product => product.department === department));
 
         }
         if (!!category) {
-            setProducts(state.filter(product => product.category === category));
+            setProducts(allProducts.filter(product => product.category === category));
 
         }
         if (!department && !category) {
-            setProducts(state);
+            setProducts(allProducts);
 
         }
         // eslint-disable-next-line

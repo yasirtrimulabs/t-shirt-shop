@@ -9,6 +9,9 @@ const Colors = {
     Red: 'red',
     Blue: 'blue',
     Green: 'green',
+    PrimaryButton: '#6EB2FB',
+    SecondaryButton: '#EFFC90',
+    AlternativeBackground: '#F1AD3D',
 }
 
 export default Colors;

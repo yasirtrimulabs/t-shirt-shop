@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components';
 import { Colors } from '../theme';
 import { Link } from "react-router-dom";
+import { FiShoppingCart } from 'react-icons/fi';
 
 const Container = styled.div`
 background-color: ${Colors.Primary};
@@ -34,6 +35,7 @@ const Header = () => {
         <Container>
             <Title to="/">T-Shirt Shop</Title>
             <NavLink to="/add">Add New T-shirt</NavLink>
+            <NavLink to="/cart"><FiShoppingCart/></NavLink>
         </Container>
     )
 }

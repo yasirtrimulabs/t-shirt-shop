@@ -5,10 +5,12 @@ import * as serviceWorker from './serviceWorker';
 import { Normalize } from 'styled-normalize'
 
 ReactDOM.render(
-  <React.StrictMode>
+  // <React.StrictMode>
+  <>
     <Normalize/>
     <App />
-  </React.StrictMode>,
+    </>,
+  // </React.StrictMode>,
   document.getElementById('root')
 );
 
