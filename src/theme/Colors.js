@@ -6,6 +6,7 @@ const Colors = {
     Shadow: '#B4B4B4',
     TextBlack: '#000000',
     TextWhite: '#FFFFFF',
+    TextGray: 'gray',
     Red: 'red',
     Blue: 'blue',
     Green: 'green',

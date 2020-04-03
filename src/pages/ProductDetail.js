@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { Colors } from '../theme';
 import { confirmAlert } from 'react-confirm-alert';
-import { ColorsRadio, SizesRadio } from '../components';
+import { ColorsRadio, SizesRadio, CartButton } from '../components';
 import ProductContext from '../context';
 
 const Body = styled.div`
@@ -28,6 +28,9 @@ const ProductCard = styled.div`
     color: ${Colors.TextBlack};
     border: 1px solid ${Colors.Shadow};
     box-shadow: 0px 0px 10px 1px ${Colors.Shadow};
+    @media (max-width: 768px) {
+        flex-direction: column;
+    }
 
 `;
 
@@ -37,6 +40,9 @@ const ProductImageContainer = styled.div`
     text-align: center;
     position: relative;
     border: 1px solid ${Colors.Primary};
+    @media (max-width: 768px) {
+        width: 100%;
+    }
 `;
 
 const ProductImage = styled.img`
@@ -46,12 +52,14 @@ const ProductImage = styled.img`
 
 const ProductDetailsContainer = styled.div`
     width: 60%;
-    height: 90%;
     display: flex;
     flex-direction: column;
     padding: 1%;
     background-color: ${Colors.PrimaryBackground};
     border: 1px solid ${Colors.Shadow};
+    @media (max-width: 768px) {
+        width: 100%;
+    }
 `;
 
 const ProductName = styled.p`
@@ -61,6 +69,8 @@ const ProductName = styled.p`
 `;
 
 const ProductDescription = styled.span`
+    align-self: center;
+    width: 70%;
     font-size: large;
     font-weight: normal;
     text-align: justify;
@@ -85,18 +95,6 @@ const ProductCategory = styled.div`
 const ProductPrice = styled.p`
     font-size: x-large;
     text-align: center;
-`;
-
-const CartButton = styled.button`
-    align-self: center;
-    width: 30%;
-    height: 50px;
-    background-color: ${Colors.Secondary};
-    color: ${Colors.TextWhite};
-    box-shadow: 0px 0px 10px 1px ${Colors.Shadow};
-    &:hover {
-    box-shadow: 0px 0px 10px 5px ${Colors.Shadow};
-    }
 `;
 
 const SizesRadioContainer = styled.div`
@@ -183,8 +181,8 @@ const ProductDetail = props => {
                 </ProductImageContainer>
                 <ProductDetailsContainer>
                     <ProductName>{product?.title}</ProductName>
-                    <h4>Product Description:</h4>
                     <ProductDescription>
+                        <h4>Product Description:</h4>
                         Fugiat aliqua aliqua qui ea magna dolore mollit incididunt laborum sint aute. Ex deserunt velit fugiat mollit veniam. Nostrud commodo dolore ipsum cillum dolore. Consectetur veniam sint veniam pariatur id ipsum. Consequat ullamco Lorem enim proident. Et velit id irure irure. Duis dolor ipsum nulla ipsum magna.Duis consequat officia ea aliqua quis laborum tempor sunt est eiusmod qui tempor ut. Adipisicing officia voluptate amet id deserunt anim velit et. Ut ad dolore deserunt non velit fugiat ex consequat velit sint. Aliqua laboris sint et id quis ipsum. Anim fugiat officia adipisicing et irure mollit duis quis laborum veniam aliquip non. Ea veniam reprehenderit proident officia magna veniam nisi incididunt est ad veniam consequat excepteur officia.
                 </ProductDescription>
                     <ColorsRadioContainer>
@@ -201,7 +199,8 @@ const ProductDetail = props => {
                         onChange={e => setQuantity(e.target.value.replace(/\D/, ''))}
                     />
                     <ProductPrice>Price: ${product?.price}</ProductPrice>
-                    <CartButton onClick={() => addToCart()}>{'Add to Cart'}</CartButton>
+                    <CartButton onClick={e => { e.stopPropagation(); addToCart(); }} />
+
                 </ProductDetailsContainer>
             </ProductCard>
         </Body>

@@ -4,6 +4,7 @@ import { Colors } from '../theme';
 import ProductContext from '../context';
 import { GiCancel } from 'react-icons/gi';
 import { confirmAlert } from 'react-confirm-alert';
+import { ColorButton } from '../components';
 
 const Body = styled.div`
 width: 100%;
@@ -31,14 +32,16 @@ const CartContainer = styled.div`
 
 const CartItemContainer = styled.div`
     display: flex;
-    flex-direction: column;
     background-color: ${Colors.PrimaryBackground};
     margin: 1%;
     border: 1px solid ${Colors.Secondary};
 `;
 
 const ItemImage = styled.img`
-    width: 30%;  
+    width: 30%;
+    @media (max-width: 768px) {
+        width: 60%;
+    }
 `;
 
 const ItemDetails = styled.div`
@@ -46,10 +49,55 @@ const ItemDetails = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
+    @media (max-width: 768px) {
+        width: 40%;
+        flex-direction: column;
+        align-items: center;
+    }
 `;
 
-const ItemDetail = styled.h5`
-    align-self: 'center';
+const RemoveButton = styled.span`
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-self: center;
+    text-align: center;
+    justify-content: space-evenly;
+    width: 100%;
+    margin: 10px;
+    color: ${Colors.Secondary};
+    background-color: ${Colors.AlternativeBackground};
+    border: 2px solid ${Colors.Secondary};
+    border-radius: 25%;
+    &:hover{
+        background-color: ${Colors.PrimaryButton};
+    }
+    @media (max-width: 768px) {
+        width: 70%;
+    }
+`;
+const ItemDetail = styled.span`
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    text-align: center;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
+    @media (max-width: 768px) {
+        flex-direction: row;
+    }
+`;
+
+const ItemDetailTitle = styled.h5`
+    align-self: center;
+    text-align: center;
+`;
+
+const ItemDetailValue = styled.p`
+    align-self: center;
+    text-align: center;
 `;
 
 const Cart = () => {
@@ -83,17 +131,42 @@ const Cart = () => {
                         <CartItemContainer key={index}>
                             <ItemImage></ItemImage>
                             <ItemDetails>
-                                <ItemDetail>Title: {product.title}</ItemDetail>
-                                <ItemDetail>Price: {product.price}</ItemDetail>
-                                <ItemDetail>Quantity: {product.quantity}</ItemDetail>
-                                <ItemDetail>Size: {product.size}</ItemDetail>
-                                <ItemDetail>Color: {product.color}</ItemDetail>
-                                <ItemDetail onClick={() => remove(product)}><GiCancel /></ItemDetail>
+                                <ItemDetail>
+                                    <ItemDetailTitle>Item: </ItemDetailTitle>
+                                    <ItemDetailValue>{product.title}</ItemDetailValue>
+                                </ItemDetail>
+                                <ItemDetail>
+                                    <ItemDetailTitle>Price: </ItemDetailTitle>
+                                    <ItemDetailValue>{product.price}</ItemDetailValue>
+                                </ItemDetail>
+                                <ItemDetail>
+                                    <ItemDetailTitle>Quantity: </ItemDetailTitle>
+                                    <ItemDetailValue>{product.quantity}</ItemDetailValue>
+                                </ItemDetail>
+                                <ItemDetail>
+                                    <ItemDetailTitle>Size: </ItemDetailTitle>
+                                    <ItemDetailValue>{product.size}</ItemDetailValue>
+                                </ItemDetail>
+                                <ItemDetail>
+                                    <ItemDetailTitle>Color: </ItemDetailTitle>
+                                    <ColorButton color={product.color} fixed />
+                                </ItemDetail>
+                                <ItemDetail>
+                                    <ItemDetailTitle>Total: </ItemDetailTitle>
+                                    <ItemDetailValue>{product.quantity * product.price}</ItemDetailValue>
+                                </ItemDetail>
+                                <RemoveButton onClick={() => remove(product)}>
+                                    <ItemDetailTitle>REMOVE</ItemDetailTitle>
+                                    <ItemDetailValue><GiCancel size={20} /></ItemDetailValue>
+                                </RemoveButton>
                             </ItemDetails>
                         </CartItemContainer>
                     ))
                 }
-                <ItemDetail>Total: {state.total}</ItemDetail>
+                <ItemDetail style={{ flexDirection: 'row' }}>
+                    <ItemDetailTitle>Grand Total:</ItemDetailTitle>
+                    <ItemDetailValue>{state.total}</ItemDetailValue>
+                </ItemDetail>
             </CartContainer>
         </Body>
     )

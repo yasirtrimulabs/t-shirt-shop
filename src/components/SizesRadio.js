@@ -1,40 +1,24 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Colors } from '../theme';
-import { FaTshirt } from 'react-icons/fa'
+import { SizeButton } from '.';
 
 const SizesContainer = styled.form`
     display: flex;
+    flex: 1;
     padding: 1%;
 `;
 
 const SizeLabel = styled.label`
     margin: 3%;
-    display: flex;
-`;
-
-const SizeContainer = styled.div`
-    display: block;
-    text-align:center;
-    border: 1px solid ${Colors.TextWhite};
-    border-radius: 25%;
-    background-color: ${Colors.AlternativeBackground};
-    &:hover{
-        border: 1px double ${Colors.TextBlack};
-    }
-`;
-
-const SizeIcon = styled(FaTshirt)`
-`;
-
-const SizeName = styled.p`
-    text-align: center;
+    width: 30%;
 `;
 
 const SizeRadio = styled.input`
   display: none;
-  &:checked ~ ${SizeContainer} {
-      border: 1px double ${Colors.TextBlack};
+  &:checked ~ p {
+    background-color: ${Colors.Secondary};
+    color: ${Colors.TextWhite};
   }
 `;
 
@@ -51,10 +35,8 @@ const SizesRadio = props => {
                     value='Small' type="radio" name='Size'
                     checked={size === 'Small'}
                 />
-                <SizeContainer>
-                    <SizeIcon size='25%' />
-                    <SizeName>{'Small'}</SizeName>
-                </SizeContainer>
+                {/* <SizeName>{'S'}</SizeName> */}
+                <SizeButton text='S' />
             </SizeLabel>
             <SizeLabel>
                 <SizeRadio
@@ -62,10 +44,8 @@ const SizesRadio = props => {
                     value='Medium' type="radio" name='Size'
                     checked={size === 'Medium'}
                 />
-                <SizeContainer>
-                    <SizeIcon size='30%' />
-                    <SizeName>{'Medium'}</SizeName>
-                </SizeContainer>
+                {/* <SizeName>{'M'}</SizeName> */}
+                <SizeButton text='M' />
             </SizeLabel>
             <SizeLabel>
                 <SizeRadio
@@ -73,10 +53,8 @@ const SizesRadio = props => {
                     value='Large' type="radio" name='Size'
                     checked={size === 'Large'}
                 />
-                <SizeContainer>
-                    <SizeIcon size='40%' />
-                    <SizeName>{'Large'}</SizeName>
-                </SizeContainer>
+                {/* <SizeName>{'L'}</SizeName> */}
+                <SizeButton text='L' />
             </SizeLabel>
         </SizesContainer>
     )

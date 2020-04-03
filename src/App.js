@@ -5,7 +5,7 @@ import { Header } from './components';
 import styled from 'styled-components';
 import { Colors } from './theme';
 import ProductContext from './context'
-
+import './App.css';
 const Router = styled(BrowserRouter)`
 background-color: ${Colors.PrimaryBackground};
 `;
@@ -80,13 +80,18 @@ function App() {
 
   return (
     <Router>
-      <Header />
-
       <ProductContext.Provider value={{ state, dispatch }}>
-        <Route path="/" exact component={Home} />
-        <Route path="/add" component={AddNewTshirt} />
-        <Route path="/item/:id" component={ProductDetail} />
-        <Route path="/cart" component={Cart} />
+        <div style={{ display: 'flex', flexDirection: "column" }}>
+          <div style={{ flex: 1 }}>
+            <Header />
+          </div>
+          <div style={{ flex: 9 }}>
+            <Route path="/" exact component={Home} />
+            <Route path="/add" component={AddNewTshirt} />
+            <Route path="/item/:id" component={ProductDetail} />
+            <Route path="/cart" component={Cart} />
+          </div>
+        </div>
       </ProductContext.Provider>
     </Router>
   );

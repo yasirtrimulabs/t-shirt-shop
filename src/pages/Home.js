@@ -9,6 +9,9 @@ const Body = styled.div`
     flex-direction: row;
     padding: 1%;
     background-color: ${Colors.PrimaryBackground};
+    @media (max-width: 768px) {
+        flex-direction: column;
+    }
 `;
 
 const FilterContainer = styled.div`
@@ -16,6 +19,12 @@ const FilterContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    @media (max-width: 768px) {
+        flex-direction: row;
+        width: 100%;
+        justify-content: space-around;
+        height: 150px;
+    }
 `;
 
 const ActiveFilters = styled.div`
@@ -25,6 +34,9 @@ const ActiveFilters = styled.div`
     flex-direction: column;
     justify-content: space-around;
     border: 2px solid ${Colors.Primary};
+    @media (max-width: 768px) {
+        width: 100%;
+    }
 `;
 
 const ActiveFilterHeading = styled.span`
@@ -44,6 +56,9 @@ const ProductsContainer = styled.div`
     width: 70%;
     display: flex;
     flex-wrap: wrap;
+    @media (max-width: 768px) {
+        width: 100%
+    }
 `;
 
 const ClearButton = styled.a`
@@ -83,21 +98,21 @@ const Home = () => {
     return (
         <Body>
             <FilterContainer>
-                {(!!department || !!category) && <ActiveFilters>
+                <ActiveFilters>
                     <ActiveFilterHeading>Filters</ActiveFilterHeading>
                     {!!department && <ActiveFilter>{department} <ClearButton onClick={() => setDepartment('')}>X</ClearButton></ActiveFilter>}
                     {!!category && <ActiveFilter>{category} <ClearButton onClick={() => setCategory('')}>X</ClearButton></ActiveFilter>}
-                </ActiveFilters>}
+                </ActiveFilters>
                 <FilterCard
                     value={department}
                     setValue={value => { setDepartment(value); setCategory('') }}
-                    title={'Choose a Department'}
+                    title={'Department'}
                     options={['Regional', 'Nature', 'Seasonal']}
                 />
                 <FilterCard
                     value={category}
                     setValue={value => setCategory(value)}
-                    title={'Choose a Category'}
+                    title={'Category'}
                     options={
                         department === 'Regional' ?
                             ['French', 'Italian', 'Irish'] :

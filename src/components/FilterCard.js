@@ -7,6 +7,10 @@ const Container = styled.form`
     justify-content: center;
     width: 100%;
     padding: 10px;
+    @media (max-width: 768px) {
+        align-items: none;
+        justify-content: none;
+    }
     `;
 
 const OptionsContainer = styled.div`
@@ -17,13 +21,19 @@ const OptionsContainer = styled.div`
     background-color: ${Colors.SecondaryBackground};
     justify-content: center;
     text-align: center;
+    @media (max-width: 768px) {
+        width: 100%;
+        align-items: none;
+        justify-content: none;
+    }
     `;
 
 const Title = styled.span`
-      font-size: 20px;
-      padding: 1px;
+      /* font-size: 20px; */
+      padding: 3px;
       color: ${Colors.TextWhite};
       background-color: ${Colors.Primary};
+      flex: 2;
     `;
 
 const OptionLabel = styled.label`
@@ -31,6 +41,7 @@ const OptionLabel = styled.label`
     padding: 5px;
     cursor: pointer;
     font-weight: normal;
+    flex: 1;
     `;
 
 const Option = styled.input`

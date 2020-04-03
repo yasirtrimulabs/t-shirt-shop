@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Colors } from '../theme';
+import { ColorButton } from '.';
 
 const ColorsContainer = styled.form`
     display: flex;
@@ -15,20 +16,8 @@ const ColorLabel = styled.label`
 const ColorRadio = styled.input`
   display: none;
   &:checked ~ span{
-      border: 2px double ${Colors.TextBlack};
+      border: 1px solid ${Colors.TextBlack};
   }
-`;
-
-const Color = styled.span`
-    display: block;
-    margin: 1px;
-    width: 25px;
-    height: 25px;
-    border-radius: 100%;
-    border: 2px double ${Colors.TextWhite};
-    &:hover{
-        border: 2px double ${Colors.TextBlack};
-    }
 `;
 
 const ColorsRadio = props => {
@@ -44,7 +33,8 @@ const ColorsRadio = props => {
                     value='red' type="radio" name='tColor'
                     checked={color === 'red'}
                 />
-                <Color style={{backgroundColor: Colors.Red}} />
+                {/* <Color style={{backgroundColor: Colors.Red}} /> */}
+                <ColorButton color="Red" />
             </ColorLabel>
             <ColorLabel>
                 <ColorRadio
@@ -52,7 +42,8 @@ const ColorsRadio = props => {
                     value='blue' type="radio" name='tColor'
                     checked={color === 'blue'}
                 />
-                <Color style={{backgroundColor: Colors.Blue}} />
+                {/* <Color style={{backgroundColor: Colors.Blue}} /> */}
+                <ColorButton color="Blue" />
             </ColorLabel>
             <ColorLabel>
                 <ColorRadio
@@ -60,7 +51,8 @@ const ColorsRadio = props => {
                     value='green' type="radio" name='tColor'
                     checked={color === 'green'}
                 />
-                <Color style={{backgroundColor: Colors.Green}} />
+                {/* <Color style={{backgroundColor: Colors.Green}} /> */}
+                <ColorButton color="Green" />
             </ColorLabel>
         </ColorsContainer>
     )

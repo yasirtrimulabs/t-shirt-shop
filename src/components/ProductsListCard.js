@@ -4,13 +4,13 @@ import { Colors } from '../theme';
 import { useHistory } from 'react-router-dom';
 import ProductContext from '../context';
 import ColorsRadio from './ColorsRadio';
-import { SizesRadio } from '.';
+import { SizesRadio, CartButton, QuantityInput } from '.';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
 const ProductCard = styled.div`
     margin: 2%;
-    width: 25%;
+    width: 26%;
     background-color: ${Colors.SecondaryBackground};
     display: flex;
     flex-direction: column;
@@ -21,6 +21,9 @@ const ProductCard = styled.div`
     box-shadow: 0px 0px 10px 1px ${Colors.Shadow};
     &:hover {
     box-shadow: 0px 0px 10px 10px ${Colors.Shadow};
+    }
+    @media (max-width: 768px) {
+        width: 90%;
     }
 `;
 
@@ -36,7 +39,6 @@ const ProductImageContainer = styled.div`
     flex: 5;
     text-align: center;
     position: relative;
-    border: 1px solid ${Colors.Primary};
 `;
 
 const ProductImage = styled.img`
@@ -64,35 +66,23 @@ const ProductPrice = styled.p`
     flex: 1;
     font-size: medium;
     text-align: center;
+    color: ${Colors.Secondary};
+    font-weight: bold;
 `;
 
-const ProductQuantity = styled.input`
-    width: 30%;
-    margin: 1%;
-    border: 1px solid ${Colors.PrimaryButton};
-    font-size: medium;
-    text-align: center;
-`;
-
-const CartButton = styled.button`
-    flex: 1;
-    width: 30%;
-    height: 10%;
-    background-color: ${Colors.Secondary};
-    color: ${Colors.TextWhite};
-    box-shadow: 0px 0px 10px 1px ${Colors.Shadow};
-    &:hover {
-    box-shadow: 0px 0px 10px 5px ${Colors.Shadow};
-    }
-`;
+// const ProductQuantity = styled.input`
+//     width: 30%;
+//     margin: 1%;
+//     border: 1px solid ${Colors.PrimaryButton};
+//     font-size: medium;
+//     text-align: center;
+// `;
 
 const SizesRadioContainer = styled.div`
-    flex: 1;
     width: 100%;
 `;
 
 const ColorsRadioContainer = styled.div`
-    flex: 1;
     width: 100%;
 `;
 
@@ -168,14 +158,19 @@ const ProductsListCard = props => {
                 <SizesRadio setSize={setSize} size={size} />
             </SizesRadioContainer>
             <ProductPrice>${product.price}</ProductPrice>
-            <ProductQuantity
-                type='number'
+            {/* <ProductQuantity
+                type='text'
                 name='quantity'
                 value={quantity}
                 onClick={e => e.stopPropagation()}
                 onChange={e => setQuantity(e.target.value.replace(/\D/, ''))}
+            /> */}
+            <QuantityInput
+                value={quantity}
+                onClick={e => e.stopPropagation()}
+                onChange={value => setQuantity(value)}
             />
-            <CartButton onClick={e => { e.stopPropagation(); addToCart(); }}>{'Add to Cart'}</CartButton>
+            <CartButton onClick={e => { e.stopPropagation(); addToCart(); }} />
 
         </ProductCard >
     )
